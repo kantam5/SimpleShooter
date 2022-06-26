@@ -47,14 +47,14 @@ void AGun::PullTrigger()
 
 	if (bHit)
 	{
-		if (HitResult.GetActor() == OwnerPawn)
+		FVector ShotDirection = -CameraRotation.Vector();
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, HitResult.Location, ShotDirection.Rotation());
+
+		if (HitResult.GetActor() && HitResult.GetActor() != this && HitResult.GetActor() != OwnerPawn)
 		{
-			return;
-		}
-		else
-		{
-			FVector ShotDirection = -CameraRotation.Vector();
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, HitResult.Location, ShotDirection.Rotation());
+			FPointDamageEvent DamageEvent(Damage, HitResult, ShotDirection, nullptr);
+			AController* OwnerController = OwnerPawn->GetController();
+			HitResult.GetActor()->TakeDamage(Damage, DamageEvent, OwnerController, this);
 		}
 	}
 }
