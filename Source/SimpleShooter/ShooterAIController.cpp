@@ -3,11 +3,20 @@
 
 #include "ShooterAIController.h"
 #include "Kismet/GameplayStatics.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 void AShooterAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+
+	if (AIBehavior)
+	{
+		RunBehaviorTree(AIBehavior);
+
+		GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
+	}
 }
 
 void AShooterAIController::Tick(float DeltaTime)
@@ -18,13 +27,21 @@ void AShooterAIController::Tick(float DeltaTime)
 
 	if (LineOfSightTo(PlayerPawn))
 	{
-		MoveToActor(PlayerPawn, AcceptanceRadius);
-		// AI Aiming 설정하면 계속 보고있다.
-		SetFocus(PlayerPawn);
+		if (AIBehavior)
+		{
+			GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
+			GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
+		}
+		// Setting PlayerLocation
+		// Setting LastKnown
 	}
 	else
 	{
-		ClearFocus(EAIFocusPriority::Gameplay);
-		StopMovement();
+		if (AIBehavior)
+		{
+			GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
+		}
 	}
+
+	
 }
