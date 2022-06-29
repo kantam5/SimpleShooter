@@ -2,10 +2,16 @@
 
 
 #include "KillEmAllGameMode.h"
+#include "ShooterPlayerController.h"
 
 void AKillEmAllGameMode::PawnKilled(APawn* PawnKilled)
 {
 	Super::PawnKilled(PawnKilled);
 
-	UE_LOG(LogTemp, Warning, TEXT("PawnKilled"));
+	APlayerController* PlayerController = Cast<APlayerController>(PawnKilled->GetController());
+	if (PlayerController)
+	{
+		// view를 지정한 Actor로 넘긴다. 
+		PlayerController->GameHasEnded();
+	}
 }
