@@ -36,11 +36,15 @@ void AGun::PullTrigger()
 	FVector End = CameraLocation + CameraRotation.Vector() * MaxRange;
 
 	FHitResult HitResult;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(OwnerPawn);
 	bool bHit = GetWorld()->LineTraceSingleByChannel(
 		HitResult,
 		CameraLocation,
 		End,
-		ECollisionChannel::ECC_GameTraceChannel1
+		ECollisionChannel::ECC_GameTraceChannel1,
+		Params
 	);
 
 	DrawDebugSphere(GetWorld(), End, 20.0f, 12, FColor::Blue, false, 1.0f);

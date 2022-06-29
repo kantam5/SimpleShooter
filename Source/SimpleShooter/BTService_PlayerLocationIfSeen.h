@@ -7,7 +7,7 @@
 #include "BTService_PlayerLocationIfSeen.generated.h"
 
 /**
- * 
+ * BTService는 Blackboard의 키값을 바꾸기 위해 사용한다.
  */
 UCLASS()
 class SIMPLESHOOTER_API UBTService_PlayerLocationIfSeen : public UBTService_BlackboardBase

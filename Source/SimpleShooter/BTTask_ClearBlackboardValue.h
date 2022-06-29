@@ -7,7 +7,7 @@
 #include "BTTask_ClearBlackboardValue.generated.h"
 
 /**
- * 
+ * BTTask는 AI의 행동을 만들기위해 사용한다.
  */
 UCLASS()
 class SIMPLESHOOTER_API UBTTask_ClearBlackboardValue : public UBTTask_BlackboardBase
