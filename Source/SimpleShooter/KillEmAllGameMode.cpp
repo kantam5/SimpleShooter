@@ -2,7 +2,7 @@
 
 
 #include "KillEmAllGameMode.h"
-#include "ShooterPlayerController.h"
+#include "EngineUtils.h"
 
 void AKillEmAllGameMode::PawnKilled(APawn* PawnKilled)
 {
@@ -11,7 +11,16 @@ void AKillEmAllGameMode::PawnKilled(APawn* PawnKilled)
 	APlayerController* PlayerController = Cast<APlayerController>(PawnKilled->GetController());
 	if (PlayerController)
 	{
-		// view를 지정한 Actor로 넘긴다. 
-		PlayerController->GameHasEnded();
+		EndGame(false);
+	}
+}
+
+void AKillEmAllGameMode::EndGame(bool bIsPlayerWinner)
+{
+	for (AController* Controller : TActorRange<AController>(GetWorld()))
+	{
+		bool bIsWinner = Controller->IsPlayerController() == bIsPlayerWinner;
+
+		Controller->GameHasEnded(Controller->GetPawn(), bIsWinner);
 	}
 }
