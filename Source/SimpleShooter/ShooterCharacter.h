@@ -36,6 +36,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetHealthPercent() const;
 
+	UFUNCTION(BlueprintPure)
+	int32 GetAmmo() const;
+
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
@@ -45,6 +48,8 @@ private:
 
 public:
 	void Shoot();
+
+	void Reload();
 
 private:
 	UPROPERTY(EditAnywhere)

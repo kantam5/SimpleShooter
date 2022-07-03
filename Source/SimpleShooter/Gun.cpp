@@ -4,6 +4,7 @@
 #include "Gun.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
+#include "TimerManager.h"
 
 // Sets default values
 AGun::AGun()
@@ -13,10 +14,19 @@ AGun::AGun()
 
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(RootComponent);
+
+	Ammo = MaxAmmo;
 }
 
 void AGun::PullTrigger()
 {
+	if (Ammo <= 0)
+	{
+		return;
+	}
+
+	Ammo -= 1;
+
 	if (MuzzleFlash)
 	{
 		UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
@@ -49,6 +59,21 @@ void AGun::PullTrigger()
 			Hit.GetActor()->TakeDamage(Damage, DamageEvent, OwnerController, this);
 		}
 	}
+}
+
+void AGun::Reload()
+{
+	GetWorldTimerManager().SetTimer(ReloadTimer, this, &AGun::ReloadAmmo, ReloadDelay);
+}
+
+void AGun::ReloadAmmo()
+{
+	Ammo = MaxAmmo;
+}
+
+int32 AGun::GetAmmo()
+{
+	return Ammo;
 }
 
 // Called when the game starts or when spawned

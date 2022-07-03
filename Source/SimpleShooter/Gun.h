@@ -17,6 +17,12 @@ public:
 
 	void PullTrigger();
 
+	void Reload();
+
+	void ReloadAmmo();
+
+	int32 GetAmmo();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -46,6 +52,17 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float Damage = 10.0f;
+
+	UPROPERTY(EditAnywhere)
+	int32 MaxAmmo;
+
+	UPROPERTY(EditAnywhere)
+	int32 Ammo;
+
+	UPROPERTY(EditAnywhere)
+	float ReloadDelay;
+
+	FTimerHandle ReloadTimer;
 
 	bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
 
